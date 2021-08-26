@@ -37,7 +37,7 @@ function Show-NotesUI {
         $opt = ""
         while ($opt -ne "Quit") {
             Show-NoteMenuBanner
-            $opt = Menu @("Create Note", "Edit Note", "View Note", "Delete Note", "List Notes", "List Notebooks", "Quit")
+            $opt = Menu @("Create Note", "Edit Note", "View Note", "Delete Note", "List Notes", "Create Notebook", "List Notebooks", "Quit")
             Clear-Host
 
             switch ($opt) {
@@ -114,6 +114,13 @@ function Show-NotesUI {
 
                     Write-Host "[esc] to exit..." -ForegroundColor DarkBlue
                     $noteTitle = Menu $noteNames
+
+                    Clear-Host
+                }
+                "Create Notebook" {
+                    $notebookName = Read-Host "Notebook Name"
+
+                    New-Notebook -Name $notebookName
 
                     Clear-Host
                 }
