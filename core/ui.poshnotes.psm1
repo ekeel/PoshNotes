@@ -42,7 +42,21 @@ function Show-NotesUI {
 
             switch ($opt) {
                 "Create Note" {
-                    
+                    $folders = @(".")
+                    $folders += Get-Notebooks
+                    Write-Host "[esc] to cancel..." -ForegroundColor DarkBlue
+                    Write-Host "Notebook:" -ForegroundColor DarkGreen
+                    $folder = Menu $folders
+                    $title = Read-Host -Prompt "Title"
+
+                    if ($folder -ne ".") {
+                        New-Note -Title $title -Folder $folder
+                    }
+                    else {
+                        New-Note -Title $title
+                    }
+
+                    Clear-Host
                 }
                 "Edit Note" {
                     $notes = Show-Notes
