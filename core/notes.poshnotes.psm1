@@ -174,3 +174,53 @@ function New-Note {
         Sync-NoteRepo
     }
 }
+
+function Rename-Note {
+    [CmdletBinding()]
+	param()
+	dynamicparam {
+		$ParameterName = "Title"
+
+		$RuntimeParameterDictionary = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+
+		$AttributeCollection = New-Object 'System.Collections.ObjectModel.Collection[System.Attribute]'
+
+		$ParameterAttribute = New-Object System.Management.Automation.ParameterAttribute
+		$ParameterAttribute.Mandatory = $false
+		$ParameterAttribute.Position = 0
+
+		$AttributeCollection.Add($ParameterAttribute)
+
+		$arrSet = (Get-ChildItem $ENV:NoteDirectory -Filter "*.md" -Recurse -File).Name
+		$ValidateSetAttribute = New-Object System.Management.Automation.ValidateSetAttribute($arrSet)
+
+		$AttributeCollection.Add($ValidateSetAttribute)
+
+		$RuntimeParameter = New-Object System.Management.Automation.RuntimeDefinedParameter($ParameterName, [string], $AttributeCollection)
+		$RuntimeParameterDictionary.Add($ParameterName, $RuntimeParameter)
+		return $RuntimeParameterDictionary
+	}
+
+	begin {
+		$Title = $PSBoundParameters["Title"]
+        $note = Show-Notes -Filter "*$Title*"
+	}
+
+	process {
+        $newTitle = Read-Host "New Title"
+        $newPath = $null
+
+        if ($note.Notebook) {
+			$newPath = ([IO.Path]::Combine($ENV:NoteDirectory, $note.Notebook, "$newTitle.md"))
+		}
+		else {
+			$newPath = ([IO.Path]::Combine($ENV:NoteDirectory, "$newTitle.md"))
+		}
+
+        Move-Item -Path $note.FullName() -Destination $newPath -Force
+	}
+
+    end {
+        Sync-NoteRepo 
+    }
+}
