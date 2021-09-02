@@ -19,7 +19,7 @@ function Initialize-PoshNotes {
         }
         
         if (-not (Get-Command markdown-toc -ErrorAction SilentlyContinue)) {
-            if (-not (Get-Command npm2 -ErrorAction SilentlyContinue)) {
+            if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
                 Write-Error "NPM is required for PoshNotes to fully function."
             }
             else {
