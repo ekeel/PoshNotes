@@ -4,7 +4,7 @@ function Get-Notebooks {
 
     begin {}
 
-    process { Get-ChildItem -Path $ENV:NoteDirectory -Exclude "*.*" | % { $_.Name } }
+    process { Get-ChildItem -Path $ENV:NoteDirectory -Directory | % { $_.Name } }
 
     end {}
 }
