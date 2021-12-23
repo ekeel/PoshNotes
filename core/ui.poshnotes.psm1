@@ -60,54 +60,113 @@ function Show-NotesUI {
                 }
                 "Edit Note" {
                     $notes = Show-Notes
-                    $noteNames = $notes.Name
+                    # $noteNames = $notes.Name
+                    $noteNames = $notes | % {
+                        if($_.Notebook) {
+                            "$($_.Notebook)/$($_.Name)"
+                        }
+                        else {
+                            $_.Name
+                        }
+                    }
 
                     Write-Host "[esc] to cancel..." -ForegroundColor DarkBlue
                     $noteTitle = Menu $noteNames
 
                     if ($noteTitle) {
-                        Edit-Note -Title $noteTitle
+                        # Edit-Note -Title $noteTitle
+                        if ($noteTitle -like "*/*") {
+                            Edit-Note -Title ($noteTitle -split '/')[1]
+                        }
+                        else {
+                            Edit-Note -Title $noteTitle
+                        }
                     }
 
                     Clear-Host
                 }
                 "Rename Note" {
                     $notes = Show-Notes
-                    $noteNames = $notes.Name
+                    # $noteNames = $notes.Name
+                    $noteNames = $notes | % {
+                        if($_.Notebook) {
+                            "$($_.Notebook)/$($_.Name)"
+                        }
+                        else {
+                            $_.Name
+                        }
+                    }
 
                     Write-Host "[esc] to cancel..." -ForegroundColor DarkBlue
                     $noteTitle = Menu $noteNames
 
                     if ($noteTitle) {
-                        Rename-Note -Title $noteTitle
+                        # Rename-Note -Title $noteTitle
+                        if ($noteTitle -like "*/*") {
+                            Rename-Note -Title ($noteTitle -split '/')[1]
+                        }
+                        else {
+                            Rename-Note -Title $noteTitle
+                        }
                     }
 
                     Clear-Host
                 }
                 "View Note" {
                     $notes = Show-Notes
-                    $noteNames = $notes.Name
+                    # $noteNames = $notes.Name
+                    $noteNames = $notes | % {
+                        if($_.Notebook) {
+                            "$($_.Notebook)/$($_.Name)"
+                        }
+                        else {
+                            $_.Name
+                        }
+                    }
 
                     Write-Host "[esc] to cancel..." -ForegroundColor DarkBlue
                     $noteTitle = Menu $noteNames
 
                     if ($noteTitle) {
-                        $note = $notes | ? { $_.Name -eq $noteTitle}
+                        # $note = $notes | ? { $_.Name -eq $noteTitle}
 
-                        Show-Markdown $note.FullName() -UseBrowser
+                        # Show-Markdown $note.FullName() -UseBrowser
+                        if ($noteTitle -like "*/*") {
+                            $title = ($noteTitle -split '/')[1]
+                            $note = $notes | ? { $_.Name -eq $title}
+                            Show-Markdown $note.FullName() -UseBrowser
+                        }
+                        else {
+                            $note = $notes | ? { $_.Name -eq $noteTitle}
+                            Show-Markdown $note.FullName() -UseBrowser
+                        }
                     }
 
                     Clear-Host
                 }
                 "Delete Note" {
                     $notes = Show-Notes
-                    $noteNames = $notes.Name
+                    # $noteNames = $notes.Name
+                    $noteNames = $notes | % {
+                        if($_.Notebook) {
+                            "$($_.Notebook)/$($_.Name)"
+                        }
+                        else {
+                            $_.Name
+                        }
+                    }
 
                     Write-Host "[esc] to cancel..." -ForegroundColor DarkBlue
                     $noteTitle = Menu $noteNames
 
                     if ($noteTitle) {
-                        Remove-Note -Title $noteTitle -Confirm
+                        # Remove-Note -Title $noteTitle -Confirm
+                        if ($noteTitle -like "*/*") {
+                            Remove-Note -Title ($noteTitle -split '/')[1]
+                        }
+                        else {
+                            Remove-Note -Title $noteTitle
+                        }
                     }
 
                     Clear-Host
